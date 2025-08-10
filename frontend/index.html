@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Satellite Embeddings – Change Explorer</title>
+    <link
+      href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/@mapbox/mapbox-gl-draw@1.4.3/dist/mapbox-gl-draw.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="sidebar">
+        <h1>Change Explorer</h1>
+        <div class="control">
+          <label>Colormap</label>
+          <select id="colormapSelect">
+            <option value="viridis" selected>viridis</option>
+            <option value="magma">magma</option>
+            <option value="plasma">plasma</option>
+            <option value="inferno">inferno</option>
+            <option value="cividis">cividis</option>
+          </select>
+        </div>
+        <div class="control grid2">
+          <div>
+            <label>Rescale min</label>
+            <input id="rescaleMin" type="number" step="0.01" value="0.8" />
+          </div>
+          <div>
+            <label>Rescale max</label>
+            <input id="rescaleMax" type="number" step="0.01" value="1" />
+          </div>
+        </div>
+        <div class="control">
+          <button id="applyBtn">Apply</button>
+        </div>
+        <div class="control legend">
+          <div class="legend-row">
+            <span>Legend</span>
+            <img id="legendImg" alt="legend" />
+          </div>
+          <div class="legend-ticks"><span id="legendMin">0.8</span><span id="legendMax">1</span></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="control">
+          <div class="stat">Clicked value: <strong id="clickedValue">–</strong></div>
+        </div>
+
+        <div class="control">
+          <label>Polygon threshold (cos &lt;)</label>
+          <input id="threshold" type="number" step="0.01" value="0.9" />
+          <div class="stat small" style="color: #666; font-size: 0.9em;">Threshold is used when computing polygon statistics</div>
+          <div class="grid2" style="margin-top:8px;">
+            <button id="drawBtn" type="button">Draw polygon</button>
+            <button id="clearBtn" type="button">Clear</button>
+          </div>
+          <div class="stat small">Draw a polygon to compute stats</div>
+          <div class="stat">Area below threshold: <strong id="areaBelow">–</strong></div>
+          <div class="stat">Mean: <strong id="meanVal">–</strong></div>
+          <div class="stat">Min / Max: <strong id="minMax">–</strong></div>
+        </div>
+      </div>
+      <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/@mapbox/mapbox-gl-draw@1.4.3/dist/mapbox-gl-draw.js"></script>
+    <script src="./app.js"></script>
+  </body>
+  </html>
+
+
