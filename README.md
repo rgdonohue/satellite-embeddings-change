@@ -57,6 +57,17 @@ python3 -m http.server 5500 -d frontend --bind 127.0.0.1
 ### 3. Open Application
 Navigate to `http://127.0.0.1:5500/` in your browser
 
+### Data Preparation (Optional)
+If you want to generate your own cosine similarity data:
+
+1. **Copy the GEE Script**: Use the script from `scripts/gee_cosine_similarity.js`
+2. **Open Earth Engine**: Go to [Google Earth Engine Code Editor](https://code.earthengine.google.com/)
+3. **Paste and Run**: Copy the script, define your Area of Interest (AOI), and run
+4. **Export Data**: Export as GeoTIFF to Google Drive, then download
+5. **Place in Data Folder**: Put the `.tif` file in the `data/` directory
+
+**Note**: The script computes cosine similarity between satellite embeddings from different years to detect land cover changes.
+
 ## Usage Guide
 
 ### Basic Visualization
@@ -87,6 +98,8 @@ satellite-embeddings-frontend/
 │   ├── app.js        # MapLibre integration and logic
 │   ├── styles.css    # Styling and layout
 │   └── images/       # Application screenshots
+├── scripts/          # Data generation scripts
+│   └── gee_cosine_similarity.js  # Google Earth Engine script
 ├── PRD.md           # Project requirements document
 └── README.md        # This file
 ```
