@@ -68,6 +68,42 @@ If you want to generate your own cosine similarity data:
 
 **Note**: The script computes cosine similarity between satellite embeddings from different years to detect land cover changes.
 
+#### Detailed GEE Workflow
+
+**Step 1: Set up your Area of Interest (AOI)**
+- In the GEE Code Editor, use the drawing tools to create a geometry
+- Or import a shapefile/KML file using the "Assets" tab
+- The script will automatically use this as your `geometry` variable
+
+**Step 2: Run the script**
+- Click the "Run" button in the Code Editor
+- The script will process and display layers on the map
+- You should see:
+  - Embeddings for 2020 (pseudoRGB)
+  - Embeddings for 2024 (pseudoRGB) 
+  - Cosine similarity layer (main output)
+
+**Step 3: Export the data**
+- After running, go to the "Tasks" tab in the Code Editor
+- You'll see a task named "sanjuans_cosine_2020_2024"
+- Click "Run" on this task to start the export
+- Choose your Google Drive folder destination
+- The export will process in the background (may take 10-30 minutes)
+
+**Step 4: Download and convert**
+- Once the task completes, download the GeoTIFF from Google Drive
+- Convert to COG format using GDAL:
+  ```bash
+  # Install GDAL if you haven't already
+  # macOS: brew install gdal
+  # Ubuntu: sudo apt-get install gdal-bin
+  
+  # Convert to COG
+  gdal_translate input.tif output_cog.tif -of COG -co COMPRESS=LZW
+  ```
+- Place the COG file in your `data/` folder
+- Update the filename in `frontend/app.js` if needed
+
 ## Usage Guide
 
 ### Basic Visualization
@@ -141,6 +177,20 @@ curl "http://localhost:8001/cog/tiles/9/102/196.png?url=/data/your_file.tif"
 docker logs titiler
 ```
 
+### GEE Script Troubleshooting
+
+**Common Issues:**
+1. **"geometry is not defined"**: Make sure you've drawn a polygon or imported geometry in the Code Editor
+2. **"No valid pixels"**: Your AOI might be outside the data coverage area
+3. **Export fails**: Check that you have sufficient quota and storage space
+4. **Script runs but no layers appear**: Check the Console tab for error messages
+
+**Performance Tips:**
+- Start with smaller AOIs for testing
+- Use the "Inspector" tab to check pixel values
+- Monitor the "Tasks" tab for export progress
+- Large exports (>1GB) may take several hours
+
 ## Development
 
 ### Adding New Features
@@ -153,6 +203,32 @@ docker logs titiler
 - CSS Grid for layout
 - Responsive design principles
 - Error handling for all API calls
+
+### Customizing the GEE Script
+
+**Change Years**: Modify the `y1` and `y2` variables to compare different time periods
+```javascript
+var y1 = 2018, y2 = 2023;  // Compare 2018 vs 2023
+```
+
+**Change Region**: Import different geometries or draw new AOIs in the Code Editor
+
+**Modify Bands**: Adjust the `rgbBands` array for different visualization
+```javascript
+var rgbBands = ['A02','A15','A08'];  // Different embedding bands
+```
+
+**Export Options**: Modify the export parameters for different scales or formats
+```javascript
+Export.image.toDrive({
+  image: out,
+  description: 'my_custom_analysis',
+  region: aoi,
+  scale: 30,              // 30m resolution (faster, smaller)
+  fileFormat: 'GeoTIFF',
+  maxPixels: 1e12         // Smaller export limit
+});
+```
 
 ## Contributing
 
